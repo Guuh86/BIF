@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            Rastrear Ônibus
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div id="floating">
+        <ion-card>
+            <ion-item-divider>
+                PAINEL DE OPÇÕES
+            </ion-item-divider>
+            <ion-list lines="none">
+                <ion-item>
+                    <div slot="start">
+                        Ver rotas:
+                        &nbsp;
+                        <ion-button (click)="drawWagnerRoute()">
+                            <ion-icon name="bus-outline"></ion-icon>
+                            Wagner
+                        </ion-button>
+                        &nbsp;
+                        <ion-button (click)="drawIfpiRoute()">
+                            <ion-icon name="bus-outline"></ion-icon>
+                            IFPI
+                        </ion-button>
+                    </div>
+                </ion-item>
+                <ion-item>
+                    Paradas: &nbsp; <ion-toggle [(ngModel)]="showMarkers" (ionChange)="toggleMarkers()"></ion-toggle>
+                </ion-item>
+            </ion-list>
+        </ion-card>
+    </div>
+    <div #map id="map"></div>
+</ion-content>

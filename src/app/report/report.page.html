@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            Relatório de Erros
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="reportForm" (ngSubmit)="saveReport()">
+    <ion-card>
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-input minlength="5" formControlName="title" labelPlacement="floating" label="Título:"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-textarea minlength="10" formControlName="desc" labelPlacement="floating" label="Descreva seu problema..."></ion-textarea>
+          </ion-item>
+
+          <ion-item lines="none">
+            Captura de tela:
+          </ion-item>
+
+          <ion-item lines="none">
+            <input #fileInput type="file" (change)="onFileSelected($event)" />
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+
+      <ion-button type="submit" [disabled]="!reportForm.valid" expand="block">Enviar</ion-button>
+    </ion-card>
+  </form>
+</ion-content>

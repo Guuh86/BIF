@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "611590824958",
+    "firebase_url": "https://busif-7c277-default-rtdb.firebaseio.com",
+    "project_id": "busif-7c277",
+    "storage_bucket": "busif-7c277.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611590824958:android:58d9ed9fb7b9b35c4d96af",
+        "android_client_info": {
+          "package_name": "com.busif.motorista"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611590824958-73ut949324e9gq2n9qsc0sb48dhgvk88.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKnnUPZNF7cJflPugAN2qkaOjRO1w2vZw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611590824958-73ut949324e9gq2n9qsc0sb48dhgvk88.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
