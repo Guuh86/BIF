@@ -22,8 +22,7 @@ export interface ReportData {
 export class ReportService {
 
   constructor(private firestore: Firestore) {}
-
-  // Recebe um callback para informar o progresso (%)
+  
   async uploadImage(file: File, onProgress: (percent: number) => void): Promise<string> {
     const storage = getStorage();
     const filePath = `reports/${Date.now()}_${file.name}`;
