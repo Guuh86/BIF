@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
-import { 
-  Firestore, 
-  doc, 
-  getDoc, 
-  collection, 
-  addDoc, 
+import {
+  Firestore,
+  doc,
+  getDoc,
+  collection,
+  addDoc,
   getDocs,
-
+  setDoc,
+  docData,
+  collectionData
 } from '@angular/fire/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from '@angular/fire/storage';
+import { Observable } from 'rxjs';
 
 export interface ReportData {
   title: string;
@@ -21,9 +24,8 @@ export interface ReportData {
 })
 export class ReportService {
 
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore) { }
 
-  // Recebe um callback para informar o progresso (%)
   async uploadImage(file: File, onProgress: (percent: number) => void): Promise<string> {
     const storage = getStorage();
     const filePath = `reports/${Date.now()}_${file.name}`;
@@ -46,17 +48,21 @@ export class ReportService {
     });
   }
 
-  async createReport(rep: ReportData) {
-    const ref = collection(this.firestore, 'reports');
-    const docRef = await addDoc(ref, rep);
-    console.log('Novo ID:', docRef.id);
+  async createReport(rep: ReportData, userId: any) {
+    const userReportsRef = collection(this.firestore, `reports/${userId}/userReports`);
+    const docRef = await addDoc(userReportsRef, rep);
+    console.log('Report criado com ID:', docRef.id);
     return docRef.id;
   }
 
-  async getReportById(id: string): Promise<ReportData | null> {
+  getMyReports(userId: any): Observable<ReportData[]> {
+    const userReportsRef = collection(this.firestore, `reports/${userId}/userReports`);
+    return collectionData(userReportsRef, { idField: 'id' }) as Observable<ReportData[]>;
+  }
+
+  getReportById(id: any): Observable<ReportData | null> {
     const ref = doc(this.firestore, `reports/${id}`);
-    const snap = await getDoc(ref);
-    return snap.exists() ? (snap.data() as ReportData) : null;
+    return docData(ref) as Observable<ReportData | null>;
   }
 
   async getAllReports(): Promise<ReportData[]> {

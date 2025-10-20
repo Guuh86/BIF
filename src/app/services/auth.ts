@@ -34,6 +34,11 @@ export class AuthService {
     return this.currentUser$.asObservable();
   }
 
+  getUserId(): string | null {
+    const user = this.currentUser$.getValue();
+    return user ? user.uid : null;
+  }
+
   async waitForAuthState(): Promise<User | null> {
     return new Promise(resolve => {
       const check = () => {

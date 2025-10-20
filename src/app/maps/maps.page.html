@@ -11,28 +11,23 @@
 
 <ion-content>
     <div id="floating">
-        <ion-card>
+        <ion-card [disabled]="disableBtn">
             <ion-item-divider>
-                PAINEL DE OPÇÕES
+                ROTAS E PARADAS
             </ion-item-divider>
-            <ion-list lines="none">
-                <ion-item>
-                    <div slot="start">
-                        Ver rotas:
-                        &nbsp;
-                        <ion-button (click)="drawWagnerRoute()">
-                            <ion-icon name="bus-outline"></ion-icon>
-                            Wagner
-                        </ion-button>
-                        &nbsp;
-                        <ion-button (click)="drawIfpiRoute()">
-                            <ion-icon name="bus-outline"></ion-icon>
-                            IFPI
-                        </ion-button>
-                    </div>
+            <ion-list>
+                <ion-item [detail]="true" [button]="true" (click)="drawWagnerRoute()">
+                    <ion-icon name="bus" slot="start"></ion-icon>
+                    VER ROTA WAGNER
                 </ion-item>
-                <ion-item>
-                    Paradas: &nbsp; <ion-toggle [(ngModel)]="showMarkers" (ionChange)="toggleMarkers()"></ion-toggle>
+                <ion-item [detail]="true" [button]="true" (click)="drawIfpiRoute()">
+                    <ion-icon name="business" slot="start"></ion-icon>
+                    VER ROTA IFPI
+                </ion-item>
+
+                <ion-item lines="none">
+                    PARADAS: &nbsp; <ion-toggle [(ngModel)]="showMarkers"
+                        (ionChange)="toggleMarkers($event)"></ion-toggle>
                 </ion-item>
             </ion-list>
         </ion-card>

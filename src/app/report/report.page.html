@@ -1,17 +1,20 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-back-button defaultHref="/home"></ion-back-button>
-        </ion-buttons>
-        <ion-title>
-            Relatório de Erros
-        </ion-title>
-    </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Relatório de Erros
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <form [formGroup]="reportForm" (ngSubmit)="saveReport()">
     <ion-card>
+      <ion-item-divider>
+        Enviar um Relatório
+      </ion-item-divider>
       <ion-card-content>
         <ion-list>
           <ion-item>
@@ -19,7 +22,8 @@
           </ion-item>
 
           <ion-item>
-            <ion-textarea minlength="10" formControlName="desc" labelPlacement="floating" label="Descreva seu problema..."></ion-textarea>
+            <ion-textarea minlength="10" formControlName="desc" labelPlacement="floating"
+              label="Descreva seu problema..."></ion-textarea>
           </ion-item>
 
           <ion-item lines="none">
@@ -35,4 +39,62 @@
       <ion-button type="submit" [disabled]="!reportForm.valid" expand="block">Enviar</ion-button>
     </ion-card>
   </form>
+
+  <ion-card>
+    <ion-item-divider>
+      Meus Relatórios
+    </ion-item-divider>
+    <ion-card-content>
+      <ng-container *ngIf="myReports?.length; else emptyReports">
+        <ion-item *ngFor="let x of myReports; let i = index" [detail]="true" [button]="true" (click)="setOpen(true, x)">
+          {{ x.title }}
+        </ion-item>
+      </ng-container>
+
+      <ng-template #emptyReports>
+        <div class="empty-cart" style="text-align: center;">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <p>Você ainda não enviou nenhum relatório de erros!</p>
+        </div>
+      </ng-template>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Meu Relatório</ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="danger" (click)="setOpen(false)">FECHAR</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-card>
+          <ion-item-divider>
+            Relatório
+          </ion-item-divider>
+          @if (modalData.imageUrl === "" || undefined) {
+            <img src="https://softhardinfo.com.br/wp-content/uploads/2022/08/bugbug.jpg">
+          } @else {
+            <img [src]="modalData.imageUrl">
+          }
+          <ion-card-content>
+            <ion-list>
+              <ion-item>
+                Título: <p slot="end">{{modalData.title}}</p>
+              </ion-item>
+              <ion-item>
+               Descrição:
+               <ion-textarea slot="end" [readonly]="true" [value]="modalData.desc">
+               </ion-textarea>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

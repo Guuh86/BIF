@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ToastController, LoadingController, IonicModule } from '@ionic/angular';
 import { ReportService, ReportData } from '../services/report';
 import { CommonModule } from '@angular/common';
+import { getAuth } from 'firebase/auth';
+import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-report',
@@ -20,21 +22,44 @@ export class ReportPage implements OnInit {
   reportForm!: FormGroup;
   selectedFile!: File | null;
   uploadProgress: number = 0;
+  myReports: any;
+
+  isModalOpen = false;
+  modalData: any;
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private fb: FormBuilder,
     private reportService: ReportService,
+    private authService: AuthService,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController
-  ) {}
+    private loadingCtrl: LoadingController,
+  ) { }
 
   ngOnInit() {
+    this.getMyReports();
     this.reportForm = this.fb.group({
       title: ['', Validators.required],
       desc: ['', Validators.required],
       imageUrl: ['']
+    });
+  }
+
+  setOpen(isOpen: boolean, data?: any) {
+    this.isModalOpen = isOpen;
+    if (data) {
+      this.modalData = data;
+    }
+  }
+
+  getMyReports() {
+    const userX = this.authService.getUserId();
+    console.log(userX);
+
+    this.reportService.getMyReports(userX).subscribe(reports => {
+      this.myReports = reports;
+      console.log('Relatórios em tempo real:', this.myReports);
     });
   }
 
@@ -70,8 +95,11 @@ export class ReportPage implements OnInit {
         imageUrl
       };
 
-      await this.reportService.createReport(data);
-      
+
+      const auth = getAuth();
+      const uid = auth.currentUser?.uid;
+      await this.reportService.createReport(data, uid);
+
       this.reportForm.reset();
       this.selectedFile = null;
       if (this.fileInput) this.fileInput.nativeElement.value = '';
