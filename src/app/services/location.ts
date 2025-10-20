@@ -3,7 +3,7 @@ import { Auth } from '@angular/fire/auth';
 import { Database, ref, set, get } from '@angular/fire/database';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { Capacitor } from '@capacitor/core';
-import { Device } from '@capacitor/device'; // <--- Import do plugin
+import { Device } from '@capacitor/device';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +29,7 @@ export class LocationService {
     }
 
     const platform = Capacitor.getPlatform();
-
-        const deviceInfo = await Device.getId();
+    const deviceInfo = await Device.getId();
     const deviceId = deviceInfo.identifier;
 
     this.watchId = await Geolocation.watchPosition(
@@ -93,7 +92,6 @@ export class LocationService {
       await Geolocation.clearWatch({ id: this.watchId });
       this.watchId = null;
     }
-
     console.log('Rastreamento parado');
   }
 }

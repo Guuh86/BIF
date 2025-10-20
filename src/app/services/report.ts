@@ -24,8 +24,13 @@ export interface ReportData {
 })
 export class ReportService {
 
+<<<<<<< HEAD
   constructor(private firestore: Firestore) { }
 
+=======
+  constructor(private firestore: Firestore) {}
+  
+>>>>>>> 25e40f97449a7ae837a9a521577f14d6fae396d6
   async uploadImage(file: File, onProgress: (percent: number) => void): Promise<string> {
     const storage = getStorage();
     const filePath = `reports/${Date.now()}_${file.name}`;

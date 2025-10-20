@@ -20,7 +20,7 @@ export class PushService {
 
   async initPush() {
     if (Capacitor.getPlatform() === 'web') {
-      console.warn('PushNotifications não disponível no web. Use Firebase Web Push para PWA.');
+      console.warn('PushNotifications não disponível no web.');
       return;
     }
 
@@ -52,12 +52,9 @@ export class PushService {
         },
         { merge: true }
       );
-      console.log('Token salvo/atualizado no Firestore:', this.deviceId);
     });
 
     PushNotifications.addListener('pushNotificationReceived', async (notification: PushNotificationSchema) => {
-      console.log('📩 Push recebido em foreground:', notification);
-
       const data = notification.data || {};
       const title = notification.title || 'Nova notificação';
       const body = notification.body || data.mensagem || '';
@@ -77,7 +74,7 @@ export class PushService {
     });
 
     PushNotifications.addListener('pushNotificationActionPerformed', (action: ActionPerformed) => {
-      console.log('🔔 Notificação clicada:', action.notification);
+      console.log('Notificação clicada:', action.notification);
     });
   }
 
@@ -91,7 +88,6 @@ export class PushService {
         visibility: 1,
         sound: 'default'
       });
-      console.log('✅ Canal de notificações criado com sucesso');
     } catch (err) {
       console.error('Erro ao criar canal de notificações:', err);
     }
