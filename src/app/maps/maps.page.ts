@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule, LoadingController } from '@ionic/angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
 import { LocationService } from '../services/location';
 
 declare const google: any;
@@ -14,7 +14,8 @@ declare const google: any;
   imports: [
     CommonModule,
     IonicModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
@@ -25,19 +26,15 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
   private intervalId: any;
 
   drawnPolyline: google.maps.Polyline | null = null;
-  private _polylineIntervalId: any = null;
+  private polylineIntervalId: any = null;
   directionsService = new google.maps.DirectionsService();
 
-  showMarkers = false;
-  markers: google.maps.Marker[] = [];
-  private _markerTimers: any[] = [];
-
   disableBtn = false;
-  isTogglingMarkers = false;
 
   constructor(
     private locationService: LocationService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() { }
@@ -46,7 +43,7 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 15,
       center: { lat: -2.9115717367163416, lng: -41.75890300847825 },
-      disableDefaultUI: true
+      disableDefaultUI: true,
     });
 
     const coords = await this.locationService.getBusLocation();
@@ -66,136 +63,20 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    const locations = [
-      { lat: -2.9359248990124276, lng: -41.730129427642794 },
-      { lat: -2.9443748872818243, lng: -41.7283460498024 },
-      { lat: -2.92032195263953, lng: -41.73012274852487 },
-      { lat: -2.919783507251914, lng: -41.742534253106925 },
-      { location: { lat: -2.9098213926989334, lng: -41.753667556835225 } },
-      { location: { lat: -2.909513983225512, lng: -41.75362609070148 } },
-    ];
-
-    this.markers = locations.map(
-      (pos: any) =>
-        new google.maps.Marker({
-          position: pos.location ? pos.location : pos,
-          map: null,
-          title: 'Ponto',
-        })
-    );
-
     this.map.setCenter({ lat: coords.lat, lng: coords.lng });
-
-    this.intervalId = setInterval(async () => {
-      const updated = await this.locationService.getBusLocation();
-      if (updated) {
-        this.animateMarker(this.marker, { lat: updated.lat, lng: updated.lng });
-      }
-    }, 5000);
-  }
-
-  animateMarker(marker: google.maps.Marker, newPosition: { lat: number; lng: number }) {
-    const DELAY = 10;
-    const steps = 50;
-
-    const currentPos = marker.getPosition()!;
-    const latDiff = newPosition.lat - currentPos.lat();
-    const lngDiff = newPosition.lng - currentPos.lng();
-
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      const lat = currentPos.lat() + (latDiff * i) / steps;
-      const lng = currentPos.lng() + (lngDiff * i) / steps;
-      marker.setPosition(new google.maps.LatLng(lat, lng));
-
-      if (i >= steps) clearInterval(interval);
-    }, DELAY);
   }
 
   ngOnDestroy() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
-    if (this._polylineIntervalId) {
-      clearInterval(this._polylineIntervalId);
-      this._polylineIntervalId = null;
-    }
-    this.clearAllMarkerTimers();
-  }
-
-  async toggleMarkers(event: any) {
-    if (this.isTogglingMarkers) {
-      event.detail.checked = this.showMarkers;
-      return;
-    }
-
-    this.isTogglingMarkers = true;
-    this.showMarkers = event.detail.checked;
-
-    const loading = await this.loadingCtrl.create({
-      message: this.showMarkers ? 'Exibindo paradas...' : 'Removendo paradas...',
-      spinner: 'dots',
-      cssClass: 'custom-loading-bottom'
-    });
-    await loading.present();
-
-    if (this.showMarkers) {
-      await this.animateMarkersDrop().catch((e) => console.error(e));
-    } else {
-      this.clearAllMarkerTimers();
-      this.markers.forEach((m) => {
-        m.setMap(null);
-        m.setAnimation(null);
-      });
-    }
-
-    await loading.dismiss();
-    this.isTogglingMarkers = false;
-  }
-
-  private clearAllMarkerTimers() {
-    if (this._markerTimers && this._markerTimers.length) {
-      this._markerTimers.forEach((t) => clearTimeout(t));
-      this._markerTimers = [];
+    if (this.polylineIntervalId) {
+      clearInterval(this.polylineIntervalId);
+      this.polylineIntervalId = null;
     }
   }
 
-  private animateMarkersDrop(): Promise<void> {
-    return new Promise((resolve) => {
-      this.clearAllMarkerTimers();
-
-      const total = this.markers.length;
-      if (total === 0) {
-        resolve();
-        return;
-      }
-
-      let finished = false;
-      this.markers.forEach((marker, i) => {
-        const t = setTimeout(() => {
-          marker.setMap(this.map);
-          marker.setAnimation(google.maps.Animation.DROP);
-
-          setTimeout(() => marker.setAnimation(null), 700);
-
-          if (i === total - 1 && !finished) {
-            finished = true;
-            setTimeout(() => resolve(), 300);
-          }
-        }, i * 150);
-
-        this._markerTimers.push(t);
-      });
-    });
-  }
-
-  bounceMarker(marker: google.maps.Marker) {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(() => marker.setAnimation(null), 2000);
-  }
-
-  private _directionsRoutePromise(request: google.maps.DirectionsRequest): Promise<any> {
+  private directionsRoutePromise(request: google.maps.DirectionsRequest): Promise<any> {
     return new Promise((resolve, reject) => {
       this.directionsService.route(request, (result: any, status: any) => {
         if (status === 'OK') resolve(result);
@@ -210,20 +91,20 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
       if (!path || !path.length) return resolve();
 
       let step = 0;
-      if (this._polylineIntervalId) {
-        clearInterval(this._polylineIntervalId);
-        this._polylineIntervalId = null;
+      if (this.polylineIntervalId) {
+        clearInterval(this.polylineIntervalId);
+        this.polylineIntervalId = null;
       }
 
-      this._polylineIntervalId = setInterval(() => {
+      this.polylineIntervalId = setInterval(() => {
         for (let k = 0; k < pushPerTick && step < path.length; k++) {
           this.drawnPolyline!.getPath().push(path[step++]);
         }
 
         if (step >= path.length) {
-          if (this._polylineIntervalId) {
-            clearInterval(this._polylineIntervalId);
-            this._polylineIntervalId = null;
+          if (this.polylineIntervalId) {
+            clearInterval(this.polylineIntervalId);
+            this.polylineIntervalId = null;
           }
           setTimeout(() => resolve(), 50);
         }
@@ -251,13 +132,13 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
       this.drawnPolyline.setMap(null);
       this.drawnPolyline = null;
     }
-    if (this._polylineIntervalId) {
-      clearInterval(this._polylineIntervalId);
-      this._polylineIntervalId = null;
+    if (this.polylineIntervalId) {
+      clearInterval(this.polylineIntervalId);
+      this.polylineIntervalId = null;
     }
 
     try {
-      const result = await this._directionsRoutePromise({
+      const result = await this.directionsRoutePromise({
         origin: { lat: -2.947877, lng: -41.731758 },
         destination: { lat: -2.947236, lng: -41.731624 },
         waypoints: [
@@ -321,13 +202,13 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
       this.drawnPolyline.setMap(null);
       this.drawnPolyline = null;
     }
-    if (this._polylineIntervalId) {
-      clearInterval(this._polylineIntervalId);
-      this._polylineIntervalId = null;
+    if (this.polylineIntervalId) {
+      clearInterval(this.polylineIntervalId);
+      this.polylineIntervalId = null;
     }
 
     try {
-      const result = await this._directionsRoutePromise({
+      const result = await this.directionsRoutePromise({
         origin: { lat: -2.947877, lng: -41.731758 },
         destination: { lat: -2.947236, lng: -41.731624 },
         waypoints: [
@@ -381,6 +262,108 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
       this.disableBtn = false;
       await loading.dismiss();
     }
+  }
+
+  locations = [
+    { lat: -2.9105388673732775, lng: -41.75363791122939, title: 'Premium Barbearia' },
+    { lat: -2.909399850703596, lng: -41.754568174499965, title: 'UFDPar' },
+    { lat: -2.9090531987900605, lng: -41.76056850667942, title: 'Carvalho Supermercado - São Sebastião' },
+    { lat: -2.9088861855462014, lng: -41.76557476812334, title: 'Léo Informática' },
+    { lat: -2.908568256061045, lng: -41.7730000255458, title: 'Igreja São Sebastião' },
+    { lat: -2.908346487088809, lng: -41.78046254451946, title: 'Funeral Prev' },
+    { lat: -2.914763813193808, lng: -41.780610417244596, title: 'Central de Flagrantes' },
+    { lat: -2.916550717862867, lng: -41.77853197143502, title: 'Padaria - Nova Parnaíba' },
+    { lat: -2.916823687204202, lng: -41.77361753371875, title: 'Corpo de Bombeiros' },
+    { lat: -2.916948118055292, lng: -41.7718467152921, title: 'Pousada Roma' },
+    { lat: -2.917650387711384, lng: -41.76868463556799, title: 'Salão Social' },
+    { lat: -2.9212269979516012, lng: -41.76283876313319, title: 'Márcia Boutique' },
+    { lat: -2.9238240829894226, lng: -41.75974761600307, title: 'Bela Opção' },
+    { lat: -2.9288241262553365, lng: -41.753410021502404, title: 'Terminal Rodoviário' },
+    { lat: -2.9293622051199533, lng: -41.75322898501406, title: 'Frangaria Todo Dia' },
+    { lat: -2.9312024284247418, lng: -41.75110154379117, title: 'PHB Rastreamento' },
+    { lat: -2.923147813555859, lng: -41.754118196417124, title: 'Parada Sem Nome :(' },
+    { lat: -2.919422078935264, lng: -41.754101253483384, title: 'Sempre Bella Cosméticos' },
+    //BUS IFPI
+    { lat: -2.9275403389654757, lng: -41.72990725194302, title: 'Fórum Desembargador Salmon Lustosa' },
+    { lat: -2.920598783713492, lng: -41.729851505194645, title: 'Espetinho II Irmãos' },
+    { lat: -2.920113675683989, lng: -41.734319156905784, title: 'Lac Lanches - Conjunto Betânia' },
+    { lat: -2.909837945994983, lng: -41.75367942459697, title: 'Elizeu Martins - Av. João Silva Filho' },
+    { lat: -2.919385011571612, lng: -41.7505285764135, title: 'Cemitério - Av. João Silva Filho' },
+    { lat: -2.9193346621209297, lng: -41.75134849234292, title: 'Pet Rações' },
+    { lat: -2.919227180211744, lng: -41.75325562506041, title: 'Cruzamento R. Horizonte e Av. João Silva Filho' },
+  ];
+
+  showMarkers = false;
+  markers: google.maps.Marker[] = [];
+  infoWindow: google.maps.InfoWindow | any;
+
+  async addMarkers() {
+    const loading = await this.showLoading('Carregando paradas...');
+    if (!this.map) return;
+    if (!this.infoWindow) this.infoWindow = new google.maps.InfoWindow();
+
+    if (this.markers.length > 0) {
+      this.markers.forEach(marker => marker.setMap(this.map));
+      await loading.dismiss();
+      return;
+    }
+
+    this.locations.forEach((loc) => {
+      const marker = new google.maps.Marker({
+        position: { lat: loc.lat, lng: loc.lng },
+        map: this.map,
+        title: loc.title,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 7,
+          fillColor: "red",
+          fillOpacity: 1,
+          strokeWeight: 2,
+          strokeColor: "green",
+        },
+      });
+
+      marker.addListener("click", () => {
+        this.infoWindow!.setContent(`<div style="color: green;">${loc.title}</div>`);
+        this.infoWindow!.open(this.map, marker);
+      });
+
+      this.markers.push(marker);
+      loading.dismiss();
+    });
+  }
+
+  async toggleMarkers(event: any) {
+    const checked = event.detail.checked;
+    if (checked) {
+      this.addMarkers();
+    } else {
+      const loading = await this.showLoading('Removendo paradas...');
+      this.removeMarkers();
+      loading.dismiss();
+    }
+  }
+
+  removeMarkers() {
+    if (this.infoWindow) this.infoWindow.close();
+    this.markers.forEach((m) => m.setMap(null));
+  }
+
+  async alertParadas() {
+    const alert = await this.alertCtrl.create({
+      header: 'Paradas',
+      subHeader: 'Entenda como funciona:',
+      message: `
+      Os pontos mostrados no mapa são as paradas mais usadas pelos alunos. 
+      Se você desce em algum ponto mas ele não está sendo exposto no mapa você 
+      pode usar a opção "Solicitar Parada" na página inicial para solicitar uma 
+      adição ou atualização.
+    `,
+      cssClass: 'alert-custom',
+      buttons: ['OK'],
+      animated: true
+    });
+    await alert.present();
   }
 
 }

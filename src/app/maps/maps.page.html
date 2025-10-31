@@ -10,7 +10,8 @@
 </ion-header>
 
 <ion-content>
-    <div id="floating">
+    <div #map id="map"></div>
+    <div id="painel">
         <ion-card [disabled]="disableBtn">
             <ion-item-divider>
                 ROTAS E PARADAS
@@ -28,9 +29,13 @@
                 <ion-item lines="none">
                     PARADAS: &nbsp; <ion-toggle [(ngModel)]="showMarkers"
                         (ionChange)="toggleMarkers($event)"></ion-toggle>
+                    <ion-buttons slot="end" (click)="alertParadas()">
+                        <ion-button slot="icon-only">
+                            <ion-icon name="information-circle"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
                 </ion-item>
             </ion-list>
         </ion-card>
     </div>
-    <div #map id="map"></div>
 </ion-content>
