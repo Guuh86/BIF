@@ -29,7 +29,7 @@ export class AuthService {
     const user = await this.crud.getUserByMatricula(matricula);
     if (!user) throw new Error('Usuário não encontrado');
 
-    return signInWithEmailAndPassword(this.auth, user.matricula, password);
+    return signInWithEmailAndPassword(this.auth, user.email, password);
   }
 
   async logout() {

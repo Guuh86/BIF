@@ -53,13 +53,13 @@ export class LoginPage {
     await loading.present();
 
     try {
-      await this.auth.loginWithCpf(this.matricula, this.senha);
+      await this.auth.loginWithMatricula(this.matricula, this.senha);
       await loading.dismiss();
       this.router.navigate(['/home']);
     } catch (err) {
       await loading.dismiss();
       const toast = await this.toastCtrl.create({
-        message: 'CPF ou senha inválidos',
+        message: 'Matrícula ou senha inválidos',
         duration: 2000,
         color: 'danger'
       });

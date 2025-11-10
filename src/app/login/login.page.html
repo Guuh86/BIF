@@ -1,37 +1,51 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>Login do Usuário</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-card>
-    <ion-item-divider>LOGIN MOTORISTA</ion-item-divider>
-    <ion-item>
-      <ion-label position="floating">CPF</ion-label>
-      <ion-input [(ngModel)]="cpf"></ion-input>
-    </ion-item>
+  <ion-segment value="aluno">
+    <ion-segment-button value="aluno" content-id="aluno">
+      <ion-label>ALUNO</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="motorista" content-id="motorista">
+      <ion-label>MOTORISTA</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-    <ion-item>
-      <ion-label position="floating">Senha</ion-label>
-      <ion-input [(ngModel)]="senha" type="password"></ion-input>
-    </ion-item>
+  <ion-segment-view>
+    <ion-segment-content id="aluno">
+      <ion-card>
+        <ion-item-divider>LOGIN ALUNO</ion-item-divider>
+        <ion-item>
+          <ion-label position="floating">Matrícula</ion-label>
+          <ion-input [(ngModel)]="matricula"></ion-input>
+        </ion-item>
 
-    <ion-button expand="full" (click)="loginMotorista()">Entrar</ion-button>
-  </ion-card>
+        <ion-item>
+          <ion-label position="floating">Senha</ion-label>
+          <ion-input [(ngModel)]="senha" type="password"></ion-input>
+        </ion-item>
 
-  <ion-card>
-    <ion-item-divider>LOGIN ALUNO</ion-item-divider>
-    <ion-item>
-      <ion-label position="floating">Matrícula</ion-label>
-      <ion-input [(ngModel)]="cpf"></ion-input>
-    </ion-item>
+        <ion-button expand="full" (click)="loginAluno()">Entrar</ion-button>
+      </ion-card>
+    </ion-segment-content>
+    <ion-segment-content id="motorista">
+      <ion-card>
+        <ion-item-divider>LOGIN MOTORISTA</ion-item-divider>
+        <ion-item>
+          <ion-label position="floating">CPF</ion-label>
+          <ion-input [(ngModel)]="cpf"></ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label position="floating">Senha</ion-label>
-      <ion-input [(ngModel)]="senha" type="password"></ion-input>
-    </ion-item>
+        <ion-item>
+          <ion-label position="floating">Senha</ion-label>
+          <ion-input [(ngModel)]="senha" type="password"></ion-input>
+        </ion-item>
 
-    <ion-button expand="full" (click)="loginAluno()">Entrar</ion-button>
-  </ion-card>
+        <ion-button expand="full" (click)="loginMotorista()">Entrar</ion-button>
+      </ion-card>
+    </ion-segment-content>
+  </ion-segment-view>
 </ion-content>
