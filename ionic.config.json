@@ -1,0 +1,7 @@
+{
+  "name": "busif_motorista",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

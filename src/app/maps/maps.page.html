@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+            Rastrear Ônibus
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div #map id="map"></div>
+    <div id="painel">
+        <ion-card [disabled]="disableBtn">
+            <ion-item-divider>
+                ROTAS E PARADAS
+            </ion-item-divider>
+            <ion-list>
+                <ion-item [detail]="true" [button]="true" (click)="drawWagnerRoute()">
+                    <ion-icon name="bus" slot="start"></ion-icon>
+                    VER ROTA WAGNER
+                </ion-item>
+                <ion-item [detail]="true" [button]="true" (click)="drawIfpiRoute()">
+                    <ion-icon name="business" slot="start"></ion-icon>
+                    VER ROTA IFPI
+                </ion-item>
+
+                <ion-item lines="none">
+                    PARADAS: &nbsp; <ion-toggle [(ngModel)]="showMarkers"
+                        (ionChange)="toggleMarkers($event)"></ion-toggle>
+                    <ion-buttons slot="end" (click)="alertParadas()">
+                        <ion-button slot="icon-only">
+                            <ion-icon name="information-circle"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
+                </ion-item>
+            </ion-list>
+        </ion-card>
+    </div>
+</ion-content>
