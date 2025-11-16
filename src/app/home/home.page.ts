@@ -4,16 +4,19 @@ import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from '../services/auth';
 import { AlertController } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, RouterModule],
+  imports: [CommonModule, IonicModule, RouterModule, FormsModule],
 })
 
 export class HomePage implements OnInit {
+
+  segmentValue: string = 'aluno';
 
   constructor(
     private authService: AuthService,
@@ -22,6 +25,14 @@ export class HomePage implements OnInit {
   ) {}
   
   ngOnInit(): void {}
+
+  ionViewWillEnter() {
+    this.segmentValue = 'aluno';
+  }
+
+  segmentChanged(event: any) {
+    this.segmentValue = event.detail.value;
+  }
 
   async presentAlertConfirm() {
     const alert = await this.alert.create({
