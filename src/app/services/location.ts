@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { Database, ref, set, get, child, getDatabase } from '@angular/fire/database';
+import { Database, ref, set, get, child, getDatabase, onValue } from '@angular/fire/database';
 import { Geolocation, Position } from '@capacitor/geolocation';
 import { Capacitor } from '@capacitor/core';
 import { Device } from '@capacitor/device';
@@ -30,8 +30,6 @@ export class LocationService {
     }
 
     const platform = Capacitor.getPlatform();
-    const deviceInfo = await Device.getId();
-    const deviceId = deviceInfo.identifier;
 
     this.watchId = await Geolocation.watchPosition(
       {
@@ -50,13 +48,12 @@ export class LocationService {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude,
           timestamp: Date.now(),
-          user: user.uid,
-          device: deviceId
+          user: user.uid
         };
 
         try {
-          await set(ref(this.db, `locations/${deviceId}`), coords);
-          console.log(`(${platform}) Localização enviada com ID do dispositivo:`, coords);
+          await set(ref(this.db, `locations`), coords);
+          console.log(`(${platform}) Localização enviada:`, coords);
         } catch (dbErr) {
           console.error('Erro ao salvar localização:', dbErr);
         }
@@ -66,24 +63,35 @@ export class LocationService {
     console.log(`Rastreamento iniciado (${platform})`);
   }
 
-  async getBusLocation(): Promise<any> {
-    const deviceInfo = await Device.getId();
-    const deviceId = deviceInfo.identifier;
 
+  async getBusLocation(): Promise<any> {
     try {
-      const snapshot = await get(ref(this.db, `locations/${deviceId}`));
+      const snapshot = await get(ref(this.db, `locations/`));
+
       if (snapshot.exists()) {
         const data = snapshot.val();
         console.log('Localização lida do Firebase:', data);
         return data;
       } else {
-        console.log('Nenhuma localização encontrada para este dispositivo.');
+        console.log('Nenhuma localização encontrada.');
         return null;
       }
     } catch (err) {
       console.error('Erro ao ler localização:', err);
       return null;
     }
+  }
+
+  listenBusLocation(callback: (data: any) => void) {
+    const locationRef = ref(this.db, 'locations');
+
+    onValue(locationRef, (snapshot) => {
+      if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        callback(null);
+      }
+    });
   }
 
   async getWaypoints(dbName: any) {

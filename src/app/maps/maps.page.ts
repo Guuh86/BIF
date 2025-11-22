@@ -24,6 +24,7 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
   private map!: google.maps.Map;
   marker!: google.maps.Marker;
   private intervalId: any;
+  busMarker: any;
 
   drawnPolyline: google.maps.Polyline | null = null;
   private polylineIntervalId: any = null;
@@ -37,9 +38,7 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
     private alertCtrl: AlertController
   ) { }
 
-  async ngOnInit() {
-    
-  }
+  async ngOnInit() { }
 
   async ngAfterViewInit() {
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
@@ -48,24 +47,35 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
       disableDefaultUI: true,
     });
 
-    const coords = await this.locationService.getBusLocation();
-    if (!coords) return;
-
-    this.marker = new google.maps.Marker({
-      position: { lat: coords.lat, lng: coords.lng },
-      map: this.map,
-      title: 'Usuário',
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 8,
-        fillColor: '#4285F4',
-        fillOpacity: 1,
-        strokeWeight: 2,
-        strokeColor: 'white'
+    this.locationService.listenBusLocation((location) => {
+      if (!location || !location.lat || !location.lng) {
+        console.log("Sem localização do ônibus.");
+        return;
       }
-    });
 
-    this.map.setCenter({ lat: coords.lat, lng: coords.lng });
+      if (!this.busMarker) {
+
+        this.busMarker = new google.maps.Marker({
+          position: { lat: location.lat, lng: location.lng },
+          map: this.map,
+          title: "Ônibus Escolar",
+          icon: {
+            url: "https://cdn-icons-png.flaticon.com/512/10903/10903014.png ",
+            scaledSize: new google.maps.Size(40, 40)
+          }
+        });
+
+        this.map.setCenter({ lat: location.lat, lng: location.lng });
+
+      } else {
+        this.busMarker.setPosition({
+          lat: location.lat,
+          lng: location.lng
+        });
+      }
+
+      this.map.setCenter({ lat: location.lat, lng: location.lng });
+    });
   }
 
   ngOnDestroy() {
@@ -140,7 +150,7 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const waypointsData = await this.locationService.getWaypoints('locationsIF');
-    
+
     const waypoints = waypointsData.map(loc => ({
       location: { lat: loc.lat, lng: loc.lng }
     }));
@@ -194,7 +204,7 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const waypointsData = await this.locationService.getWaypoints('locationsWG');
-    
+
     const waypoints = waypointsData.map(loc => ({
       location: { lat: loc.lat, lng: loc.lng }
     }));
