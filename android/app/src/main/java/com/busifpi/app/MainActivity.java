@@ -1,4 +1,4 @@
-package com.busif.motorista;
+package com.busifpi.app;
 
 import com.getcapacitor.BridgeActivity;
 

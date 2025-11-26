@@ -1,5 +1,5 @@
 {
-  "name": "busif_motorista",
+  "name": "BusIFPI",
   "integrations": {
     "capacitor": {}
   },

@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.busif.motorista',
-  appName: 'BusIF Motorista',
+  appId: 'com.busifpi.app',
+  appName: 'BusIFPI',
   webDir: 'www',
 };
 

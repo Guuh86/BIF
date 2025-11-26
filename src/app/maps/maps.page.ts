@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IonicModule, LoadingController, AlertController } from '@ionic/angular';
+import { IonicModule, LoadingController, AlertController, ToastController } from '@ionic/angular';
 import { LocationService } from '../services/location';
 
 declare const google: any;
@@ -35,47 +35,71 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private locationService: LocationService,
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController
   ) { }
 
   async ngOnInit() { }
 
   async ngAfterViewInit() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Procurando o busão. Aguarde...'
+    });
+
+    await loading.present();
+
+    const timeout = setTimeout(async () => {
+      await loading.dismiss();
+      this.showToast('Não foi possível obter a localização do ônibus.');
+    }, 12000);
+
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 15,
       center: { lat: -2.9115717367163416, lng: -41.75890300847825 },
       disableDefaultUI: true,
     });
 
-    this.locationService.listenBusLocation((location) => {
-      if (!location || !location.lat || !location.lng) {
-        console.log("Sem localização do ônibus.");
-        return;
-      }
+    let firstLocation = false;
 
-      if (!this.busMarker) {
+    try {
+      this.locationService.listenBusLocation(async (location) => {
 
-        this.busMarker = new google.maps.Marker({
-          position: { lat: location.lat, lng: location.lng },
-          map: this.map,
-          title: "Ônibus Escolar",
-          icon: {
-            url: "https://cdn-icons-png.flaticon.com/512/10903/10903014.png ",
-            scaledSize: new google.maps.Size(40, 40)
-          }
-        });
+        if (!location || !location.lat || !location.lng) {
+          //console.log("Sem localização do ônibus.");
+          return;
+        }
+
+        if (!firstLocation) {
+          firstLocation = true;
+          clearTimeout(timeout);
+          await loading.dismiss();
+        }
+
+        if (!this.busMarker) {
+          this.busMarker = new google.maps.Marker({
+            position: { lat: location.lat, lng: location.lng },
+            map: this.map,
+            title: "Ônibus Escolar",
+            icon: {
+              url: "https://cdn-icons-png.flaticon.com/512/10903/10903014.png",
+              scaledSize: new google.maps.Size(40, 40)
+            }
+          });
+        } else {
+          this.busMarker.setPosition({
+            lat: location.lat,
+            lng: location.lng
+          });
+        }
 
         this.map.setCenter({ lat: location.lat, lng: location.lng });
+      });
 
-      } else {
-        this.busMarker.setPosition({
-          lat: location.lat,
-          lng: location.lng
-        });
-      }
-
-      this.map.setCenter({ lat: location.lat, lng: location.lng });
-    });
+    } catch (err) {
+      clearTimeout(timeout);
+      await loading.dismiss();
+      this.showToast('Erro ao carregar a localização do busão');
+    }
   }
 
   ngOnDestroy() {
@@ -133,6 +157,17 @@ export class MapsPage implements OnInit, AfterViewInit, OnDestroy {
     });
     await loading.present();
     return loading;
+  }
+
+  async showToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger'
+    });
+
+    toast.present();
   }
 
   async drawIfpiRoute() {

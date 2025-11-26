@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:611590824958:android:58d9ed9fb7b9b35c4d96af",
+        "mobilesdk_app_id": "1:611590824958:android:0c1641e518af562a4d96af",
         "android_client_info": {
-          "package_name": "com.busif.motorista"
+          "package_name": "com.busifpi.app"
         }
       },
       "oauth_client": [
