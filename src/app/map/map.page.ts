@@ -30,12 +30,13 @@ export class MapPage implements OnInit, OnDestroy {
     private locationService: LocationService,
     private toastCtrl: ToastController,
     private alert: AlertController,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) { }
 
   async ngOnInit() {
     this.locationService.startTracking();
-    //await this.notificationService.createNotification('inicio_rota', 'Motorista-CAPAR.01');
+    await this.notificationService.createNotification('inicio_rota', 'Motorista-CAPAR.01');
     this.showToast('Rota iniciada com sucesso!');
   }
 
@@ -113,7 +114,7 @@ export class MapPage implements OnInit, OnDestroy {
           text: 'SIM',
           handler: () => {
             this.locationService.stopTracking();
-            //this.notificationService.createNotification('fim_rota', 'Motorista-CAPAR.01');
+            this.notificationService.createNotification('fim_rota', 'Motorista-CAPAR.01');
             this.showToast('Rota finalizada com sucesso!');
             this.router.navigate(['/home']);
           },
