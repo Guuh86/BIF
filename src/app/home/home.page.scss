@@ -1,95 +1,66 @@
-ion-tabs {
-  background: var(--ion-color-tertiary);
-
-  ion-tab-bar {
-    position: relative;
-    width: 90%;
-    transform: translate(-50%, -50%);
-    left: 50%;
-    border-radius: 30px;
-    padding-bottom: 0;
-    border: 1px solid rgba(2, 52, 54, 0.08);
-    overflow: hidden;
-    box-shadow: 0px -5px 10px rgb(3 181 170 / 8%);
-    height: 80px;
-    --background: var(--ion-color-light);
-
-    ion-tab-button {
-      --background: var(--ion-color-light);
-      --color: #BEC2C6;
-      
-      ion-icon{
-        font-size: 1.9rem;
-      }
-    }
-  }
-}
-
-ion-header{
-  ion-toolbar{
+ion-header {
+  ion-toolbar {
     --padding-start: 16px;
     --padding-end: 16px;
-    
-    ion-title{
+
+    ion-title {
       max-width: 40vh;
-      ion-label{
-        ion-text{
+
+      ion-label {
+        ion-text {
           font-size: 1rem;
         }
+
         p {
-          ion-text{
+          ion-text {
             font-size: 1.0rem !important;
           }
         }
       }
     }
-    ion-avatar{
+
+    ion-avatar {
       height: 2.5rem;
       width: 2.5rem;
       border: 1px solid var(--ion-color-tertiary);
 
-      img{
+      img {
         max-width: 100%;
       }
     }
   }
 }
 
-ion-list.routes{
-  border-radius: 5vh 5vh 0 0;
-  background: var(--ion-color-tertiary);
-  padding-bottom: 10vh;
-  ion-list-header{
-    padding-inline-start: 3.5vh;
+ion-content {
+  ion-row.div-map {
+    position: relative;
+    padding: 1.5rem;
+    height: 52vh;
+    background: #fff;
+    border-radius: 1.5rem;
+    margin: 1.2rem 1rem 1rem 1rem;
   }
-  ion-list-header, ion-item {
-    ion-label{
-      font-size: 1.1rem;
-    }
+
+  ion-card{
+    border-radius: 1.5rem;
+    margin: 1.2rem 1rem 1rem 1rem;
   }
 }
 
-ion-item-group{
+ion-item-group {
   padding: 0 3.5vh;
-  ion-item{
-    font-weight: bold;
+
+  ion-item {
     --background: transparent;
     --border-style: dashed;
     --padding-start: 0;
+
     ion-text[slot="end"] {
-      font-size: 1rem;
+      font-size: 12px;
     }
+
     p {
-      font-size: 0.9rem;
-      font-weight: normal;
-      margin-top: 3px;
+      font-size: 12px;
     }
   }
-}
-
-#map{
-  width: 100%;
-  height: 48.5rem;
-
-  border: 1px solid white;
 }
