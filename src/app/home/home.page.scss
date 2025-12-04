@@ -1,66 +1,69 @@
-ion-header {
-  ion-toolbar {
-    --padding-start: 16px;
-    --padding-end: 16px;
-
-    ion-title {
-      max-width: 40vh;
-
-      ion-label {
-        ion-text {
-          font-size: 1rem;
-        }
-
-        p {
-          ion-text {
-            font-size: 1.0rem !important;
-          }
-        }
-      }
-    }
-
-    ion-avatar {
-      height: 2.5rem;
-      width: 2.5rem;
-      border: 1px solid var(--ion-color-tertiary);
-
-      img {
-        max-width: 100%;
-      }
-    }
-  }
-}
-
 ion-content {
-  ion-row.div-map {
-    position: relative;
-    padding: 1.5rem;
-    height: 52vh;
-    background: #fff;
-    border-radius: 1.5rem;
-    margin: 1.2rem 1rem 1rem 1rem;
+  --padding-start: 2rem;
+  --padding-end: 2rem;
+
+  #map {
+    width: 80%;
+    height: 10%;
   }
 
-  ion-card{
-    border-radius: 1.5rem;
-    margin: 1.2rem 1rem 1rem 1rem;
-  }
-}
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 3rem;
 
-ion-item-group {
-  padding: 0 3.5vh;
+    h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      color: #515151;
+      margin: 0;
+    }
+
+    .avatar {
+      ion-avatar {
+        width: 50px;
+        height: 50px;
+      }
+
+      background-color: #6b45bc;
+      border-radius: 50%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+  }
 
   ion-item {
     --background: transparent;
+    --background-color: transparent;
     --border-style: dashed;
-    --padding-start: 0;
+  }
 
-    ion-text[slot="end"] {
-      font-size: 12px;
+  .list-header {
+    font-weight: 700;
+    color: #515151;
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .routes {
+    ion-label {
+      color: #515151;
+
+      ion-text {
+        color: #515151;
+        font-size: 1rem;
+        font-weight: 700;
+      }
     }
 
-    p {
-      font-size: 12px;
+    .end {
+      color: #515151;
+      font-size: 1rem;
+      font-weight: 700;
     }
   }
 }

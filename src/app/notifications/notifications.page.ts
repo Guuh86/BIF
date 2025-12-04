@@ -3,23 +3,27 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { NotificationService } from '../services/notification';
+import {
+  InfiniteScrollCustomEvent,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
   standalone: true,
-  imports: [ IonicModule ,CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
 export class NotificationsPage implements OnInit {
-  
+
   notifications: any[] = [];
   groupedNotifications: { date: string, items: any[] }[] = [];
+  items !: any[];
 
-  private pageSize = 8;   
-  private currentIndex = 0; 
-  private allNotifications: any[] = []; 
-  hasMore: boolean = false; 
+  private pageSize = 8;
+  private currentIndex = 0;
+  private allNotifications: any[] = [];
+  hasMore: boolean = false;
 
   constructor(
     private notificationService: NotificationService,
@@ -30,7 +34,8 @@ export class NotificationsPage implements OnInit {
       this.allNotifications = data;
       this.currentIndex = 0;
       this.notifications = [];
-      this.loadMoreNotifications(); 
+      this.loadMoreNotifications();
+      this.generateItems();
     });
   }
 
@@ -61,9 +66,22 @@ export class NotificationsPage implements OnInit {
     }));
   }
 
-  loadMore() {
+  /* loadMore() {
     this.loadMoreNotifications();
+  } */
+
+  generateItems() {
+    const count = this.notifications.length + 1;
+    for (let i = 0; i < 10; i++) {
+      this.items.push(`Item ${count + i}`);
+    }
   }
 
+  onIonInfinite(event: InfiniteScrollCustomEvent) {
+    this.generateItems();
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
+  }
 
 }

@@ -1,13 +1,64 @@
-<ion-header [translucent]="true">  
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
-    </ion-buttons>
-    <ion-title>Notificações </ion-title>
+    <ion-title mode="md" class="ion-no-padding">
+      <ion-label>
+        <ion-text color="tertiary">Bem-vindo!</ion-text>
+        <p>
+          <ion-text color="white">Nome Motorista</ion-text>
+        </p>
+      </ion-label>
+    </ion-title>
+    <ion-avatar slot="end">
+      <img src="#">
+    </ion-avatar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content>
+
+  <ion-card>
+    <ion-card-content>
+      @for (group of items; track group; let index = $index){
+      @for (x of group.items; track x; let index = $index){
+      <ion-item lines="none" class="full-img-item" [detail]="true" button>
+        <ion-icon *ngIf="x.tipo === 'inicio_rota'" color="success" name="map" slot="start"></ion-icon>
+        <ion-icon *ngIf="x.tipo === 'fim_rota'" color="danger" name="map" slot="start"></ion-icon>
+        <ion-icon *ngIf="x.tipo === 'imprevisto'" color="warning" name="alert" slot="start"></ion-icon>
+        <ion-icon *ngIf="x.tipo === 'noroute'" color="danger" name="close" slot="start"></ion-icon>
+
+        <ion-label class="item-label">
+          <ng-container *ngIf="x.tipo === 'inicio_rota'">
+            <h2>Rota Iniciada!</h2>
+            <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
+          </ng-container>
+
+          <ng-container *ngIf="x.tipo === 'fim_rota'">
+            <h2>Rota Encerrada!</h2>
+            <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
+          </ng-container>
+
+          <ng-container *ngIf="x.tipo === 'imprevisto'">
+            <h2>Houve um imprevisto!</h2>
+            <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
+          </ng-container>
+
+          <ng-container *ngIf="x.tipo === 'noroute'">
+            <h2>Não haverá rota!</h2>
+            <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
+          </ng-container>
+        </ion-label>
+      </ion-item>
+      }
+      }
+    </ion-card-content>
+  </ion-card>
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+
+<!-- <ion-content [fullscreen]="true" class="ion-padding">
   <ng-container *ngFor="let group of groupedNotifications; index as i">
       <ion-item-divider>{{ group.date | date:'dd/MM/yyyy' }}</ion-item-divider>
 
@@ -47,3 +98,4 @@
         </ion-button>
     </div>
 </ion-content>
+ -->

@@ -6,7 +6,6 @@ import { LocationService } from '../services/location';
 import { NotificationService } from '../services/notification';
 import { Router } from '@angular/router';
 import { Geolocation } from '@capacitor/geolocation';
-import { ref, onValue } from '@angular/fire/database';
 
 declare const google: any;
 

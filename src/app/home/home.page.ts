@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from '../services/auth';
 import { AlertController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+
+declare var google: any;
 
 @Component({
   selector: 'app-home',
@@ -16,51 +18,27 @@ import { FormsModule } from '@angular/forms';
 
 export class HomePage implements OnInit {
 
-  segmentValue: string = 'aluno';
+  @ViewChild('map', { static: false }) mapElement!: ElementRef;
+
+  map: any;
+  userMarker: google.maps.Marker | null = null;
+  private watchId: string | null = null;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private alert: AlertController
-  ) {}
-  
-  ngOnInit(): void {}
+  ) { }
 
-  ionViewWillEnter() {
-    this.segmentValue = 'aluno';
-  }
+  ngOnInit(): void { }
 
-  segmentChanged(event: any) {
-    this.segmentValue = event.detail.value;
-  }
-
-  async presentAlertConfirm() {
-    const alert = await this.alert.create({
-      header: 'Atenção!',
-      message: 'Deseja realmente sair do sistema?',
-      buttons: [
-        {
-          text: 'NÃO',
-          role: 'cancel',
-          handler: () => {
-            return
-          }
-        },
-        {
-          text: 'SIM',
-          handler: () => {
-            this.logout();
-          }
-        }
-      ]
+  async ngAfterViewInit() {
+    this.map = new google.maps.Map(this.mapElement.nativeElement, {
+      zoom: 15,
+      center: { lat: -2.9115717367163416, lng: -41.75890300847825 },
+      disableDefaultUI: true,
     });
-
-    await alert.present();
   }
 
-  logout(){
-    this.authService.logout();
-    this.router.navigate(['/login']);
-  }
 }
 

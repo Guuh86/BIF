@@ -1,0 +1,42 @@
+ion-header {
+    ion-toolbar {
+        --padding-start: 16px;
+        --padding-end: 16px;
+
+        ion-title {
+            max-width: 40vh;
+
+            ion-label {
+                ion-text {
+                    font-size: 1rem;
+                }
+
+                p {
+                    ion-text {
+                        font-size: 1.0rem !important;
+                    }
+                }
+            }
+        }
+
+        ion-avatar {
+            height: 2.5rem;
+            width: 2.5rem;
+            border: 1px solid var(--ion-color-tertiary);
+
+            img {
+                max-width: 100%;
+            }
+        }
+    }
+}
+
+ion-content {
+    --background: var(--ion-color-tertiary);
+
+    .notifications {
+        height: 55vh;
+        border-radius: 1.5rem;
+        margin: 1.2rem 1rem 1rem 1rem;
+    }
+}

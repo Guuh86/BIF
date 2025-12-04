@@ -1,61 +1,43 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-title mode="md" class="ion-no-padding">
-      <ion-label>
-        <ion-text color="tertiary">Bem-vindo!</ion-text>
-        <p>
-          <ion-text color="white">Nome Motorista</ion-text>
-        </p>
-      </ion-label>
-    </ion-title>
-    <ion-avatar slot="end">
-      <img src="#">
-    </ion-avatar>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content color="tertiary">
-
-  <ion-row class="div-map">
-    <ng-template>
-      <div id="map" #map></div>
-    </ng-template>
-  </ion-row>
-
-  <div class="div-route">
-    <ion-card>
-      <ion-card-content>
-        <ion-list class="routes">
-      <ion-list-header>
-        <ion-label color="medium">Iniciar uma rota</ion-label>
-      </ion-list-header>
-      <ion-item-group>
-        <ion-item [detail]="true" [button]="true" lines="full">
-          <ion-icon name="business" slot="start"></ion-icon>
-          <ion-label>
-            <ion-text>Rota IFPI</ion-text>
-          </ion-label>
-          <ion-text slot="end">
-            10KM
-          </ion-text>
-        </ion-item>
-        <ion-item [detail]="true" [button]="true" lines="full">
-          <ion-icon name="bus" slot="start"></ion-icon>
-          <ion-label>
-            <ion-text>Rota WAGNER</ion-text>
-          </ion-label>
-          <ion-text slot="end">
-            8KM
-          </ion-text>
-        </ion-item>
-      </ion-item-group>
-    </ion-list>        
-      </ion-card-content>
-    </ion-card>
+<ion-content>
+  <div class="header">
+    <h1>BusIFPI</h1>
+    <div class="avatar">
+      <ion-avatar>
+        <ion-img src="https://t.ctcdn.com.br/OWaqJSGgQH8eormYpwYDF3LE22U=/768x432/smart/i529206.png"></ion-img>
+      </ion-avatar>
+    </div>
   </div>
+  <ion-item>
+    <h1 class="list-header">Mapa de Rota</h1>
+  </ion-item>
 
-
-
+  <div #map id="map"></div>
+  
+  <ion-item>
+    <h1 class="list-header">Iniciar uma Rota</h1>
+  </ion-item>
+  <div class="routes">
+    <ion-item-group>
+      <ion-item [detail]="true" [button]="true">
+        <ion-icon name="business" slot="start"></ion-icon>
+        <ion-label>
+          <ion-text>Rota IFPI</ion-text>
+        </ion-label>
+        <ion-text class="end" slot="end">
+          10KM
+        </ion-text>
+      </ion-item>
+      <ion-item [detail]="true" [button]="true">
+        <ion-icon name="bus" slot="start"></ion-icon>
+        <ion-label>
+          <ion-text>Rota WAGNER</ion-text>
+        </ion-label>
+        <ion-text class="end" slot="end">
+          8KM
+        </ion-text>
+      </ion-item>
+    </ion-item-group>
+  </div>
 </ion-content>
 
 
