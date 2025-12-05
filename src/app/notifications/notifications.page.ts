@@ -35,7 +35,6 @@ export class NotificationsPage implements OnInit {
       this.currentIndex = 0;
       this.notifications = [];
       this.loadMoreNotifications();
-      this.generateItems();
     });
   }
 
@@ -66,22 +65,8 @@ export class NotificationsPage implements OnInit {
     }));
   }
 
-  /* loadMore() {
+  loadMore() {
     this.loadMoreNotifications();
-  } */
-
-  generateItems() {
-    const count = this.notifications.length + 1;
-    for (let i = 0; i < 10; i++) {
-      this.items.push(`Item ${count + i}`);
-    }
-  }
-
-  onIonInfinite(event: InfiniteScrollCustomEvent) {
-    this.generateItems();
-    setTimeout(() => {
-      event.target.complete();
-    }, 500);
-  }
+  } 
 
 }

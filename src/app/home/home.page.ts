@@ -6,8 +6,6 @@ import { AuthService } from '../services/auth';
 import { AlertController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 
-declare var google: any;
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
