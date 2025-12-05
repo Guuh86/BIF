@@ -18,8 +18,8 @@ export class InfoPage implements OnInit {
   constructor() { }
 
   async ngOnInit() {
-    const info = await Device.getInfo();
+/*     const info = await Device.getInfo();
     console.log('Device info:', info);
-    this.deviceModel = info.model;
+    this.deviceModel = info.model; */
   }
 }

@@ -2,11 +2,13 @@ ion-content {
   --padding-start: 2rem;
   --padding-end: 2rem;
 
-  #map {
-    width: 80%;
-    height: 10%;
+  .mapa{
+    border: 1px solid whitesmoke;
+    width: 100%;
+    height: 50%;
+    border-radius: 1.8vh;
   }
-
+  
   .header {
     display: flex;
     justify-content: space-between;
@@ -65,5 +67,11 @@ ion-content {
       font-size: 1rem;
       font-weight: 700;
     }
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+    border-radius: 1.8vh;
   }
 }
