@@ -1,6 +1,6 @@
 <ion-content>
   <div class="header">
-    <h1>Notificações</h1>
+    <h1>Avisos</h1>
     <div class="avatar">
       <ion-avatar>
         <ion-img src="https://t.ctcdn.com.br/OWaqJSGgQH8eormYpwYDF3LE22U=/768x432/smart/i529206.png"></ion-img>
@@ -13,8 +13,7 @@
       <ion-item-divider>{{ group.date | date:'dd/MM/yyyy' }}</ion-item-divider>
 
       <div *ngFor="let x of group.items; index as j">
-        <ion-card>
-          <ion-item lines="none" class="full-img-item" [detail]="true" button>
+          <ion-item class="full-img-item" [detail]="true" button>
             <ion-icon *ngIf="x.tipo === 'inicio_rota'" color="success" name="map" slot="start"></ion-icon>
             <ion-icon *ngIf="x.tipo === 'fim_rota'" color="danger" name="map" slot="start"></ion-icon>
             <ion-icon *ngIf="x.tipo === 'imprevisto'" color="warning" name="alert" slot="start"></ion-icon>
@@ -39,50 +38,12 @@
               </div>
             </ion-label>
           </ion-item>
-        </ion-card>
       </div>
     </div>
   </div>
+  <ion-fab horizontal="end" vertical="bottom">
+    <ion-fab-button>
+      <ion-icon class="large-icon" name="warning"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
-
-<!-- <ion-content [fullscreen]="true" class="ion-padding">
-  <ng-container *ngFor="let group of groupedNotifications; index as i">
-      <ion-item-divider>{{ group.date | date:'dd/MM/yyyy' }}</ion-item-divider>
-
-      <ng-container *ngFor="let x of group.items; index as j">
-        <ion-card>
-          <ion-item lines="none" class="full-img-item" [detail]="true" button>
-            <ion-icon *ngIf="x.tipo === 'inicio_rota'" color="success" name="map" slot="start"></ion-icon>
-            <ion-icon *ngIf="x.tipo === 'fim_rota'" color="danger" name="map" slot="start"></ion-icon>
-            <ion-icon *ngIf="x.tipo === 'imprevisto'" color="warning" name="alert" slot="start"></ion-icon>
-            <ion-icon *ngIf="x.tipo === 'noroute'" color="danger" name="close" slot="start"></ion-icon>
-
-            <ion-label class="item-label">
-              <ng-container *ngIf="x.tipo === 'inicio_rota'">
-                <h2>Rota Iniciada!</h2>
-                <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
-              </ng-container>
-              <ng-container *ngIf="x.tipo === 'fim_rota'">
-                <h2>Rota Encerrada!</h2>
-                <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
-              </ng-container>
-              <ng-container *ngIf="x.tipo === 'imprevisto'">
-                <h2>Houve um imprevisto!</h2>
-                <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
-              </ng-container>
-              <ng-container *ngIf="x.tipo === 'noroute'">
-                <h2>Não haverá rota!</h2>
-                <p class="date">{{ x.timestamp.toDate() | date:'dd/MM/yyyy - HH:mm' }}</p>
-              </ng-container>
-            </ion-label>
-          </ion-item>
-        </ion-card>
-      </ng-container>
-    </ng-container>
-    <div class="load-more" *ngIf="hasMore">
-      <ion-button fill="clear" expand="block" (click)="loadMore()">
-          Carregar mais...
-        </ion-button>
-    </div>
-</ion-content>
- -->

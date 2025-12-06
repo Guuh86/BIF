@@ -31,15 +31,29 @@ ion-content {
         }
     }
 
+    ion-item-divider {
+        font-weight: 700;
+    }
+
     .notif-content {
-        border: 1px dashed white;
-
-        
-
-        .full-img-item{
+        ion-item {
             --background: transparent;
-        --background-color: transparent;
-        --border-style: dashed;
+            --background-color: transparent;
+            --border-style: dashed;
+            margin: 5px 0 5px 0;
+            font-weight: 700;
+
+            h2 {
+                font-weight: 700;
+            }
+
+            .date {
+                color: #515151;
+            }
+
+            ion-icon, .large-icon {
+                font-size: 1.5rem;
+            }
         }
 
     }
