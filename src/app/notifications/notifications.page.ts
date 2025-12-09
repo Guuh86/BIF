@@ -20,6 +20,8 @@ export class NotificationsPage implements OnInit {
   groupedNotifications: { date: string, items: any[] }[] = [];
   items !: any[];
 
+  loading: any
+
   private pageSize = 8;
   private currentIndex = 0;
   private allNotifications: any[] = [];
@@ -29,20 +31,25 @@ export class NotificationsPage implements OnInit {
     private notificationService: NotificationService,
   ) { }
 
-  async ngOnInit() {
-    await this.notificationService.getNotification().subscribe(data => {
+  ngOnInit() {
+    this.loading = true;
+    this.notificationService.getNotification().subscribe(data => {
       this.allNotifications = data;
       this.currentIndex = 0;
       this.notifications = [];
       this.loadMoreNotifications();
+      this.loading = false;
     });
   }
 
   loadMoreNotifications() {
     const next = this.allNotifications.slice(this.currentIndex, this.currentIndex + this.pageSize);
+
     this.notifications = [...this.notifications, ...next];
     this.currentIndex += this.pageSize;
+
     this.groupData();
+
     this.hasMore = this.currentIndex < this.allNotifications.length;
   }
 
@@ -65,8 +72,14 @@ export class NotificationsPage implements OnInit {
     }));
   }
 
-  loadMore() {
+  loadMore(event: any) {
     this.loadMoreNotifications();
-  } 
+
+    event.target.complete();
+    if (!this.hasMore) {
+      event.target.disabled = true;
+    }
+  }
+
 
 }

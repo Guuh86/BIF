@@ -7,4 +7,30 @@
       </ion-avatar>
     </div>
   </div>
+
+  <div class="notif-content">
+    <ion-item-group>
+      <ion-item [detail]="true" [button]="true">
+        <ion-icon slot="start" name="bug"></ion-icon>
+        <ion-label>
+          <h2>Relatar Erros</h2>
+          <p>Encontrou algum erro? Reporte</p>
+        </ion-label>
+      </ion-item>
+      <ion-item [detail]="true" [button]="true">
+        <ion-icon slot="start" name="information-circle"></ion-icon>
+        <ion-label>
+          <h2>Sobre</h2>
+          <p>Sobre o desenvolvimento</p>
+        </ion-label>
+      </ion-item>
+      <ion-item [detail]="true" [button]="true">
+        <ion-icon slot="start" name="exit"></ion-icon>
+        <ion-label>
+          <h2 class="logoff">Sair</h2>
+          <p>Fazer logoff do aplicativo</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+  </div>
 </ion-content>
