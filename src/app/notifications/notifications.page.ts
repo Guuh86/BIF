@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController, ToastController, AlertController } from '@ionic/angular';
 import { NotificationService } from '../services/notification';
-import {
-  InfiniteScrollCustomEvent,
-} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-notifications',
@@ -29,6 +26,9 @@ export class NotificationsPage implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
+    private modalCtrl: ModalController,
+    private alert: AlertController,
+    private toast: ToastController,
   ) { }
 
   ngOnInit() {
@@ -55,14 +55,40 @@ export class NotificationsPage implements OnInit {
 
   private groupData() {
     const grouped = this.notifications.reduce((acc: any, noti: any) => {
-      const date = new Date(noti?.timestamp?.seconds * 1000)
-        .toISOString()
-        .split('T')[0];
 
-      if (!acc[date]) {
-        acc[date] = [];
+      if (!noti || typeof noti !== 'object') {
+        console.warn("Notificação inválida (não é objeto):", noti);
+        return acc;
       }
-      acc[date].push(noti);
+
+      const timestamp = noti.timestamp;
+      let date: Date | null = null;
+
+      if (timestamp?.toDate instanceof Function) {
+        date = timestamp.toDate();
+      }
+      else if (timestamp && typeof timestamp.seconds === 'number') {
+        date = new Date(timestamp.seconds * 1000);
+      }
+      else if (typeof timestamp === 'number') {
+        date = new Date(timestamp);
+      }
+      else if (typeof timestamp === 'string') {
+        const parsed = new Date(timestamp);
+        if (!isNaN(parsed.getTime())) date = parsed;
+      }
+      if (!date || isNaN(date.getTime())) {
+        console.warn("Timestamp inválido:", timestamp);
+        return acc;
+      }
+
+      const key = date.toISOString().split('T')[0];
+
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+
+      acc[key].push(noti);
       return acc;
     }, {} as { [key: string]: any[] });
 
@@ -71,6 +97,7 @@ export class NotificationsPage implements OnInit {
       items: grouped[date]
     }));
   }
+
 
   loadMore(event: any) {
     this.loadMoreNotifications();
@@ -81,5 +108,68 @@ export class NotificationsPage implements OnInit {
     }
   }
 
+  async sendNotificationImprevisto() {
+    const alert = await this.alert.create({
+      header: 'Atenção!',
+      message: 'Deseja realmente emitir o alerta "Pneu Furado"?',
+      buttons: [
+        {
+          text: 'NÃO',
+          role: 'cancel',
+          handler: () => {
+            this.showToast('Alerta cancelado com sucesso!');
+            this.modalCtrl.dismiss();
+          }
+        },
+        {
+          text: 'SIM',
+          handler: () => {
+            this.notificationService.createNotification('imprevisto', 'Motorista-CAPAR.01');
+            this.showToast('Alerta enviado com sucesso!');
+            this.modalCtrl.dismiss();
+          }
+        }
+      ]
+    });
 
+    await alert.present();
+  }
+
+  async createNotificationNoRoute() {
+    const alert = await this.alert.create({
+      header: 'Atenção!',
+      message: 'Deseja realmente emitir o alerta "Não haverá rota"?',
+      buttons: [
+        {
+          text: 'NÃO',
+          role: 'cancel',
+          handler: () => {
+            this.showToast('Alerta cancelado com sucesso!');
+            this.modalCtrl.dismiss();
+          }
+        },
+        {
+          text: 'SIM',
+          handler: () => {
+            this.notificationService.createNotification('noroute', 'Motorista-CAPAR.01');
+            this.showToast('Alerta enviado com sucesso!');
+            this.modalCtrl.dismiss();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async showToast(msg: string) {
+    const toast = await this.toast.create({
+      message: msg,
+      duration: 2000
+    });
+    await toast.present();
+  }
+
+  closeModal() {
+    return this.modalCtrl.dismiss();
+  }
 }
