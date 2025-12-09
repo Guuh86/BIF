@@ -1,15 +1,10 @@
-/* REMOVE o ion-content { ... } 
-   Tudo deve ficar solto aqui no root!
-*/
-
 :host {
-  ion-content {
-    --padding-start: 2rem;
-    --padding-end: 2rem;
-  }
+    ion-content {
+        --padding-start: 2rem;
+        --padding-end: 2rem;
+    }
 }
 
-/* Cabeçalho */
 .header {
     display: flex;
     justify-content: space-between;
@@ -39,15 +34,13 @@
     }
 }
 
-/* Divisor de data */
 ion-item-divider {
     font-weight: 700;
 }
 
-/* Área das notificações */
 .notif-content,
 .notifications {
-    padding-bottom: 80px;  /* ESPAÇO para o infinite scroll aparecer */
+    padding-bottom: 80px;
 }
 
 .notif-content ion-item {
@@ -65,8 +58,49 @@ ion-item-divider {
         color: #515151;
     }
 
-    ion-icon, 
+    ion-icon,
     .large-icon {
         font-size: 1.5rem;
+    }
+}
+
+.more {
+    color: #515151;
+    font-weight: bold;
+    text-align: center;
+    margin: 1rem;
+}
+
+
+ion-modal {
+    --height: auto;
+
+    .block {
+
+        ion-item {
+            --background: transparent;
+            --background-color: transparent;
+            --border-style: dashed;
+        }
+
+        width: 100%;
+        height: 300px;
+        align-items: center;
+        justify-content: center;
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #515151;
+            margin: 2rem;
+            text-align: center;
+        }
+
+        .aviso {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #515151;
+            text-align: center;
+        }
     }
 }
