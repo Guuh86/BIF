@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ModalController, ToastController, AlertController } from '@ionic/angular';
@@ -12,7 +12,7 @@ import { NotificationService } from '../services/notification';
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class NotificationsPage implements OnInit {
-
+  
   notifications: any[] = [];
   groupedNotifications: { date: string, items: any[] }[] = [];
   items !: any[];
@@ -172,4 +172,9 @@ export class NotificationsPage implements OnInit {
   closeModal() {
     return this.modalCtrl.dismiss();
   }
+
+  abrirDetalhes(noti: any) {
+  console.log("Clicou!", noti);
+  // abrir modal, navegar, etc
+}
 }
