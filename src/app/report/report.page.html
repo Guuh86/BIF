@@ -1,4 +1,21 @@
-<ion-header>
+<ion-content [fullscreen]="true">
+  <div class="header">
+    <h1>Relatórios</h1>
+    <div class="avatar">
+      <ion-avatar>
+        <ion-img src="https://t.ctcdn.com.br/OWaqJSGgQH8eormYpwYDF3LE22U=/768x432/smart/i529206.png"></ion-img>
+      </ion-avatar>
+    </div>
+  </div>
+
+  <div class="form">
+    <form [formGroup]="reportForm" (ngSubmit)="saveReport()">
+      
+    </form>    
+  </div>
+</ion-content>
+
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/home"></ion-back-button>
@@ -97,4 +114,4 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-</ion-content>
+</ion-content> -->

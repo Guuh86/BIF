@@ -33,9 +33,9 @@
     <ng-container *ngIf="!loading">
       <div *ngFor="let group of groupedNotifications; index as i">
 
-<!--         <ion-item-divider>
+        <ion-item-divider>
           {{ group.date | date:'dd/MM/yyyy' }}
-        </ion-item-divider> -->
+        </ion-item-divider>
 
         <div *ngFor="let x of group.items; index as j">
           <ion-item class="full-img-item" [detail]="true" button>
@@ -74,9 +74,9 @@
     </ng-container>
 
     @if(hasMore){
-      <div class="more">
-        <ion-icon name="chevron-down-outline" class="arrow-down"></ion-icon>
-      </div>
+    <div class="more">
+      <ion-icon name="chevron-down-outline" class="arrow-down"></ion-icon>
+    </div>
     }
 
   </div>

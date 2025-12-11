@@ -57,3 +57,43 @@ ion-content {
         color: var(--ion-color-danger);
     }
 }
+
+.modal-mini-bug {
+    --width: 350px;
+    --height: 460px;
+    --border-radius: 20px;
+    --backdrop-opacity: 0.4;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-mini-bug::part(content) {
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.modal-bug-content {
+    p {
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-align: center;
+        margin: 1rem;
+    }
+
+    ion-item {
+        --background: transparent;
+        --background-color: transparent;
+        --border-style: dashed;
+        margin: 5px 0 5px 0;
+        font-weight: 700;
+
+        .filename {
+            font-size: 0.5rem;
+        }
+    }
+
+    .modal-form-content {
+        margin: 1rem;
+    }
+}
