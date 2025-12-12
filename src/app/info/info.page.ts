@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IonicModule, ToastController, LoadingController } from '@ionic/angular';
+import { IonicModule, ToastController, LoadingController, ModalController } from '@ionic/angular';
 import { ReportService, ReportData } from '../services/report';
 import { getAuth } from 'firebase/auth';
 import { Device } from '@capacitor/device';
+import { AuthService } from '../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-info',
@@ -26,7 +28,10 @@ export class InfoPage implements OnInit {
     private fb: FormBuilder,
     private loadingCtrl: LoadingController,
     private reportService: ReportService,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private modalCtrl: ModalController,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.reportForm = this.fb.group({
       title: ['', Validators.required],
@@ -95,10 +100,11 @@ export class InfoPage implements OnInit {
     } catch (err) {
       console.error(err);
       this.showToast('Ocorreu um erro ao enviar o relatório.');
-      this.closeModal();
+      await loading.dismiss();
+      await this.closeModal();
     } finally {
-      loading.dismiss();
-      this.closeModal();
+      await loading.dismiss();
+      await this.closeModal();
     }
   }
 
@@ -110,8 +116,35 @@ export class InfoPage implements OnInit {
     await toast.present();
   }
 
-  closeModal() {
-    const modal = document.querySelector('#modalBug') as HTMLIonModalElement;
-    modal?.dismiss();
+  cleanupIonInert() {
+    document.querySelectorAll('[inert]').forEach(el => el.removeAttribute('inert'));
   }
+
+  async closeModal() {
+    this.selectedFile = null;
+    this.selectedFileName = null;
+    const modal = await this.modalCtrl.getTop();
+    if (modal) await modal.dismiss();
+    this.cleanupIonInert();
+  }
+
+  public alertButtons = [
+    {
+      text: 'Não',
+      role: 'cancel',
+      handler: () => {
+        return
+      },
+    },
+    {
+      text: 'Sim',
+      role: 'confirm',
+      handler: () => {
+        this.authService.logout().then(() => {
+          this.router.navigateByUrl('login')
+        })
+      },
+    },
+  ];
+
 }

@@ -17,14 +17,14 @@
           <p>Encontrou algum erro? Reporte</p>
         </ion-label>
       </ion-item>
-      <ion-item [detail]="true" [button]="true" id="open-modal-sobre">
+      <ion-item [detail]="true" [button]="true" id="modal-sobre">
         <ion-icon slot="start" name="information-circle"></ion-icon>
         <ion-label>
           <h2>Sobre</h2>
           <p>Sobre o desenvolvimento</p>
         </ion-label>
       </ion-item>
-      <ion-item [detail]="true" [button]="true">
+      <ion-item [detail]="true" [button]="true" id="present-alert">
         <ion-icon slot="start" name="exit"></ion-icon>
         <ion-label>
           <h2 class="logoff">Sair</h2>
@@ -49,19 +49,19 @@
             </ion-buttons>
           </ion-item>
           <div class="modal-form-content">
-            <ion-item>
+            <ion-item class="item">
               <ion-input formControlName="title" label="Título:" labelPlacement="floating">
                 <ion-icon name="bug" slot="start"></ion-icon>
               </ion-input>
             </ion-item>
-            <ion-item>
+            <ion-item class="item">
               <ion-textarea formControlName="desc" label="Descreva o erro:" labelPlacement="floating"
                 [autocapitalize]="true" rows="5">
                 <ion-icon name="pencil" slot="start"></ion-icon></ion-textarea>
             </ion-item>
-            <p>Captura de Tela: Caso ache necessário, você pode anexar uma captura de
+            <p>Caso ache necessário, você pode anexar uma captura de
               tela para ajudar a nossa equipe de desenvolvimento a solucionar o problema</p>
-            <ion-item>
+            <ion-item class="item">
               <ion-button (click)="triggerFileInput()" slot="start">
                 <ion-icon name="cloud-upload"></ion-icon>
               </ion-button>
@@ -75,4 +75,46 @@
       </form>
     </ng-template>
   </ion-modal>
+
+  <ion-modal trigger="modal-sobre" class="modal-mini-sobre">
+    <ng-template>
+      <div class="modal-bug-content">
+        <ion-item lines="none">
+          <ion-label>
+            <ion-text>Sobre o desenvolvimento</ion-text>
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button slot="icon-only" (click)="closeModal()">
+              <ion-icon name="close" color="danger"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+        <div class="devlist">
+          <ion-item>
+            <ion-icon slot="start" name="information-circle"></ion-icon>
+            <ion-label>
+              <ion-text>BusIFPI - App de mobilidade estudantil</ion-text>
+              <p class="detail">2025 BusIFPI</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="code"></ion-icon>
+            <ion-label>
+              <ion-text>Versão do aplicativo</ion-text>
+              <p class="detail">1.0.0</p>
+            </ion-label>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" name="phone-portrait"></ion-icon>
+            <ion-label>
+              <ion-text>Modelo do aparelho</ion-text>
+              <p class="detail">{{deviceModel}}</p>
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <ion-alert trigger="present-alert" header="Atenção!" message="Deseja realmente sair da sua conta?" [buttons]="alertButtons"></ion-alert>
 </ion-content>

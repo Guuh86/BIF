@@ -58,17 +58,24 @@ ion-content {
     }
 }
 
-.modal-mini-bug {
+.modal-mini-bug,
+.modal-mini-sobre {
     --width: 350px;
     --height: 460px;
     --border-radius: 20px;
-    --backdrop-opacity: 0.4;
+    --backdrop-opacity: 0.5;
     --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     justify-content: center;
     align-items: center;
+    z-index: -999;
 }
 
 .modal-mini-bug::part(content) {
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.modal-mini-sobre::part(content) {
     border-radius: 20px;
     padding: 20px;
 }
@@ -95,5 +102,18 @@ ion-content {
 
     .modal-form-content {
         margin: 1rem;
+    }
+}
+
+.devlist{
+    ion-text{
+        font-size: 0.9rem;
+    }
+
+    .detail{
+        font-size: 0.7rem;
+        text-align: left;
+        padding: 0;
+        margin: 0;
     }
 }
