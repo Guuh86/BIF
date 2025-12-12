@@ -1,3 +1,32 @@
 <ion-content [fullscreen]="true">
-  
+    <div class="header">
+        <h1>BusIFPI</h1>
+        <div class="avatar">
+            <ion-avatar>
+                <ion-img src="https://t.ctcdn.com.br/OWaqJSGgQH8eormYpwYDF3LE22U=/768x432/smart/i529206.png"></ion-img>
+            </ion-avatar>
+        </div>
+    </div>
+    <ion-item class="list">
+        <h1 class="list-header">Login do Usuário</h1>
+    </ion-item>
+    <div class="login-form">
+        <ion-img src="../../assets/imgs/20944201.jpg"></ion-img>
+        <form>
+            <ion-item>
+                <ion-input label="Matrícula:" labelPlacement="floating">
+                    <ion-icon name="person" slot="start"></ion-icon>
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-input label="Senha:" labelPlacement="floating">
+                    <ion-icon name="ellipsis-horizontal" slot="start"></ion-icon>
+                </ion-input>
+            </ion-item>
+            <ion-button class="button" expand="full">ENTRAR</ion-button>
+        </form>
+    </div>
+    <ion-item>
+        <h1 class="list-header">Mais opções</h1>
+    </ion-item>
 </ion-content>
