@@ -1,6 +1,12 @@
 <ion-content>
   <div class="header">
+    @if(showItems == 1){
     <h1>Opções</h1>
+    } @else if (showItems == 2){
+    <h1>Relatar</h1>
+    } @else if (showItems == 3) {
+    <h1>Sobre</h1>
+    }
     <div class="avatar">
       <ion-avatar>
         <ion-img src="https://t.ctcdn.com.br/OWaqJSGgQH8eormYpwYDF3LE22U=/768x432/smart/i529206.png"></ion-img>
@@ -8,16 +14,17 @@
     </div>
   </div>
 
+  @if (showItems == 1) {
   <div class="notif-content">
     <ion-item-group>
-      <ion-item [detail]="true" [button]="true" id="modal-bug">
+      <ion-item [detail]="true" [button]="true" (click)="showItems = 2">
         <ion-icon slot="start" name="bug"></ion-icon>
         <ion-label>
           <h2>Relatar Erros</h2>
           <p>Encontrou algum erro? Reporte</p>
         </ion-label>
       </ion-item>
-      <ion-item [detail]="true" [button]="true" id="modal-sobre">
+      <ion-item [detail]="true" [button]="true" (click)="showItems = 3">
         <ion-icon slot="start" name="information-circle"></ion-icon>
         <ion-label>
           <h2>Sobre</h2>
@@ -33,88 +40,73 @@
       </ion-item>
     </ion-item-group>
   </div>
+  }
 
-  <ion-modal id="modalBug" trigger="modal-bug" class="modal-mini-bug">
-    <ng-template>
-      <form [formGroup]="reportForm" (ngSubmit)="saveReport()">
-        <div class="modal-bug-content">
-          <ion-item lines="none">
-            <ion-label>
-              <ion-text>Reportar erros</ion-text>
-            </ion-label>
-            <ion-buttons slot="end">
-              <ion-button slot="icon-only" (click)="closeModal()">
-                <ion-icon name="close" color="danger"></ion-icon>
-              </ion-button>
-            </ion-buttons>
+  @if(showItems == 2){
+  <div class="notif-content">
+    <form [formGroup]="reportForm" (ngSubmit)="saveReport()">
+      <div>
+        <div>
+          <ion-item class="item">
+            <ion-icon name="bug" slot="start"></ion-icon>
+            <ion-input formControlName="title" label="Título:">
+            </ion-input>
           </ion-item>
-          <div class="modal-form-content">
-            <ion-item class="item">
-              <ion-input formControlName="title" label="Título:" labelPlacement="floating">
-                <ion-icon name="bug" slot="start"></ion-icon>
-              </ion-input>
-            </ion-item>
-            <ion-item class="item">
-              <ion-textarea formControlName="desc" label="Descreva o erro:" labelPlacement="floating"
-                [autocapitalize]="true" rows="5">
-                <ion-icon name="pencil" slot="start"></ion-icon></ion-textarea>
-            </ion-item>
-            <p>Caso ache necessário, você pode anexar uma captura de
-              tela para ajudar a nossa equipe de desenvolvimento a solucionar o problema</p>
-            <ion-item class="item">
-              <ion-button (click)="triggerFileInput()" slot="start">
-                <ion-icon name="cloud-upload"></ion-icon>
-              </ion-button>
-              @if(selectedFileName){ <p class="filename">{{selectedFileName}}</p> }
-            </ion-item>
-          </div>
-        </div>
-        <input #fileInput type="file" id="fileInput" accept="image/*,.heic,.heif" hidden
-          (change)="fileSelected($event)">
-        <ion-button type="submit" [disabled]="!reportForm.valid" expand="block">ENVIAR RELATÓRIO</ion-button>
-      </form>
-    </ng-template>
-  </ion-modal>
-
-  <ion-modal trigger="modal-sobre" class="modal-mini-sobre">
-    <ng-template>
-      <div class="modal-bug-content">
-        <ion-item lines="none">
-          <ion-label>
-            <ion-text>Sobre o desenvolvimento</ion-text>
-          </ion-label>
-          <ion-buttons slot="end">
-            <ion-button slot="icon-only" (click)="closeModal()">
-              <ion-icon name="close" color="danger"></ion-icon>
+          <ion-item class="item">
+            <ion-icon name="pencil" slot="start"></ion-icon>
+            <ion-textarea formControlName="desc" label="Descreva o erro:" labelPlacement="floating"
+              [autocapitalize]="true" rows="5"></ion-textarea>
+          </ion-item>
+          <p>Caso ache necessário, você pode anexar uma captura de
+            tela para ajudar a nossa equipe de desenvolvimento a solucionar o problema</p>
+          <ion-item class="item">
+            <ion-button (click)="triggerFileInput()" slot="start">
+              <ion-icon name="cloud-upload"></ion-icon>
             </ion-button>
-          </ion-buttons>
-        </ion-item>
-        <div class="devlist">
-          <ion-item>
-            <ion-icon slot="start" name="information-circle"></ion-icon>
-            <ion-label>
-              <ion-text>BusIFPI - App de mobilidade estudantil</ion-text>
-              <p class="detail">2025 BusIFPI</p>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon slot="start" name="code"></ion-icon>
-            <ion-label>
-              <ion-text>Versão do aplicativo</ion-text>
-              <p class="detail">1.0.0</p>
-            </ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-icon slot="start" name="phone-portrait"></ion-icon>
-            <ion-label>
-              <ion-text>Modelo do aparelho</ion-text>
-              <p class="detail">{{deviceModel}}</p>
-            </ion-label>
+            @if(selectedFileName){ <p class="filename">{{selectedFileName}}</p> }
           </ion-item>
         </div>
       </div>
-    </ng-template>
-  </ion-modal>
+      <input #fileInput type="file" id="fileInput" accept="image/*,.heic,.heif" hidden (change)="fileSelected($event)">
+      <ion-button class="btn" fill="clear" type="submit" [disabled]="!reportForm.valid" expand="block">
+        ENVIAR RELATÓRIO &nbsp; <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </form>
+  </div>
+  }
 
-  <ion-alert trigger="present-alert" header="Atenção!" message="Deseja realmente sair da sua conta?" [buttons]="alertButtons"></ion-alert>
+  @if(showItems == 3){
+  <div class="notif-content">
+    <ion-item>
+      <ion-icon slot="start" name="information-circle"></ion-icon>
+      <ion-label>
+        <ion-text>BusIFPI - App de mobilidade estudantil</ion-text>
+        <p class="detail">2025 BusIFPI</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="code"></ion-icon>
+      <ion-label>
+        <ion-text>Versão do aplicativo</ion-text>
+        <p class="detail">1.0.0</p>
+      </ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="phone-portrait"></ion-icon>
+      <ion-label>
+        <ion-text>Modelo do aparelho</ion-text>
+        <p class="detail">{{deviceModel}}</p>
+      </ion-label>
+    </ion-item>
+  </div>
+  }
+
+  @if(showItems != 1){
+  <div class="bottom-button">
+    <ion-button fill="clear" expand="full" color="danger" (click)="showItems = 1">voltar</ion-button>
+  </div>
+  }
+
+  <ion-alert trigger="present-alert" header="Atenção!" message="Deseja realmente sair da sua conta?"
+    [buttons]="alertButtons"></ion-alert>
 </ion-content>

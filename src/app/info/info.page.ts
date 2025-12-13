@@ -24,6 +24,8 @@ export class InfoPage implements OnInit {
   selectedFile!: File | null;
   uploadProgress: number = 0;
 
+  showItems: any;
+
   constructor(
     private fb: FormBuilder,
     private loadingCtrl: LoadingController,
@@ -41,6 +43,7 @@ export class InfoPage implements OnInit {
   }
 
   async ngOnInit() {
+    this.showItems = 3;
     const info = await Device.getInfo();
     console.log('Device info:', info);
     this.deviceModel = info.model;
